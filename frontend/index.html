@@ -20,40 +20,41 @@
   <!-- NAVBAR -->
   <nav class="navbar navbar-dark bg-dark sticky-top">
     <div class="container-fluid">
-      <a class="navbar-brand fw-bold fs-5" href="#home">
-        <i class="bi bi-shop"></i> StreetWear Shop
+      <a class="navbar-brand" href="#home" style="font-size: 20px;">
+        <img src="/img/logo.png" alt="StreetWear Shop Logo" style="height: 100px;">
       </a>
       <div class="d-flex align-items-center">
-        <span class="text-light me-3">
+        <span class="text-light me-3" style="font-size: 20px;">
           Carrinho: <span id="carrinhoCount" class="badge bg-danger">0</span>
         </span>
-        <button class="btn btn-outline-light btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart">
+        <button class="btn btn-outline-light btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" style="font-size: 20px;">
           <i class="bi bi-cart3"></i> Ver Carrinho
         </button>
       </div>
     </div>
   </nav>
 
-  <!-- HERO SECTION COM PARALLAX -->
+  <!-- CARROSSEL -->
   <section id="hero" class="hero-section">
-    <div class="container-fluid">
-      <div class="row align-items-center min-vh-100">
-        <div class="col-lg-6 pe-lg-5 text-center text-lg-start">
-          <h1 class="display-3 fw-bold mb-4 fade-in-text">
-            STYLE IS A STATEMENT
-          </h1>
-          <p class="lead mb-4 fade-in-text" style="animation-delay: 0.2s;">
-            Descubra a melhor coleção de roupas streetwear do mercado
-          </p>
-          <a href="#produtos" class="btn btn-dark btn-lg fade-in-text" style="animation-delay: 0.4s;">
-            Ver Coleção
-          </a>
+    <div id="carouselHero" class="carousel slide" data-bs-ride="carousel" style="min-height: 70vh;">
+      <div class="carousel-inner" style="height: 70vh;">
+        <div class="carousel-item active" style="height: 100%;">
+          <img src="/img/carrossel1.png" class="d-block w-100" alt="Imagem 1" style="object-fit: contain; height: 100%;">
         </div>
-        <div class="col-lg-6 text-center">
-          <img src="/img/Gemini_Generated_Image_xo4evjxo4evjxo4e.png "Hero" class="img-fluid hero-image">
+        <div class="carousel-item" style="height: 100%;">
+          <img src="/img/carrosel2.png" class="d-block w-100" alt="Imagem 2" style="object-fit: contain; height: 100%;">
+        </div>
+        <div class="carousel-item" style="height: 100%;">
+          <img src="/img/carrossel3.png" class="d-block w-100" alt="Imagem 3" style="object-fit: contain; height: 100%;">
         </div>
       </div>
-    </div>  
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselHero" data-bs-slide="prev" style="z-index: 10;">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselHero" data-bs-slide="next" style="z-index: 10;">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
   </section>
 
   <!-- PRODUTOS -->
