@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StreetWear Shop - E-commerce</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <!-- GSAP para animações -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-dark bg-dark sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold fs-5" href="#home">
+        <i class="bi bi-shop"></i> StreetWear Shop
+      </a>
+      <div class="d-flex align-items-center">
+        <span class="text-light me-3">
+          Carrinho: <span id="carrinhoCount" class="badge bg-danger">0</span>
+        </span>
+        <button class="btn btn-outline-light btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart">
+          <i class="bi bi-cart3"></i> Ver Carrinho
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION COM PARALLAX -->
+  <section id="hero" class="hero-section">
+    <div class="container-fluid">
+      <div class="row align-items-center min-vh-100">
+        <div class="col-lg-6 pe-lg-5 text-center text-lg-start">
+          <h1 class="display-3 fw-bold mb-4 fade-in-text">
+            STYLE IS A STATEMENT
+          </h1>
+          <p class="lead mb-4 fade-in-text" style="animation-delay: 0.2s;">
+            Descubra a melhor coleção de roupas streetwear do mercado
+          </p>
+          <a href="#produtos" class="btn btn-dark btn-lg fade-in-text" style="animation-delay: 0.4s;">
+            Ver Coleção
+          </a>
+        </div>
+        <div class="col-lg-6 text-center">
+          <img src="/img/Gemini_Generated_Image_xo4evjxo4evjxo4e.png "Hero" class="img-fluid hero-image">
+        </div>
+      </div>
+    </div>  
+  </section>
+
+  <!-- PRODUTOS -->
+  <section id="produtos" class="produtos-section py-5">
+    <div class="container">
+      <h2 class="text-center mb-5 section-title">COLEÇÃO PREMIUM</h2>
+
+      <div id="produtosContainer" class="row g-4">
+        <!-- Produtos carregados via JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-dark text-light py-4 mt-5">
+    <div class="container text-center">
+      <p>&copy; 2024 StreetWear Shop. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- CARRINHO OFFCANVAS -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart">
+    <div class="offcanvas-header bg-dark text-light">
+      <h5 class="offcanvas-title">Meu Carrinho</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div id="carrinhoItems">
+        <p class="text-muted">Seu carrinho está vazio</p>
+      </div>
+      <div id="carrinhoTotal" class="mt-4" style="display: none;">
+        <hr>
+        <h5>Total: R$ <span id="totalPrice">0.00</span></h5>
+        <button class="btn btn-dark w-100 mt-3">Finalizar Compra</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/carrinho.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

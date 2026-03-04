@@ -1,0 +1,22 @@
+# Node modules
+node_modules/
+package-lock.json
+npm-debug.log
+
+# Banco de dados
+backend/database.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Variáveis de ambiente
+.env
+.env.local
