@@ -288,3 +288,51 @@ body {
     opacity: 1;
   }
 }
+
+/* SEÇÃO DE IDEIAS DE LOOK */
+.looks-section {
+  background-color: #f5f5f5;
+}
+
+.look-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.look-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.look-card .carousel-inner {
+  position: relative;
+}
+
+.look-card .carousel-control-prev,
+.look-card .carousel-control-next {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.look-card .carousel-control-prev:hover,
+.look-card .carousel-control-next:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.look-card h5 {
+  font-weight: 700;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-size: 1.1rem;
+}
+
+.look-card p {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  padding-bottom: 15px;
+}

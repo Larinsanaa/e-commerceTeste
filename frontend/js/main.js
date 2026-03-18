@@ -1,19 +1,62 @@
 // Registrar ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
+// Armazenar todos os produtos globalmente
+let todosProdutos = [];
+
 // Inicializar aplicação
 async function inicializar() {
   console.log('Iniciando aplicação...');
 
   // Carregar produtos
-  const produtos = await carregarProdutos();
-  renderizarProdutos(produtos);
+  todosProdutos = await carregarProdutos();
+  filtrarProdutos();
 
   // Carregar carrinho
   await atualizarCarrinho();
 
+  // Configurar filtros
+  configurarFiltros();
+
   // Configurar animações
   configurarAnimacoesScroll();
+}
+
+// Configurar event listeners dos filtros
+function configurarFiltros() {
+  document.getElementById('busca').addEventListener('input', filtrarProdutos);
+  document.getElementById('filtroCategoria').addEventListener('change', filtrarProdutos);
+  document.getElementById('ordenacao').addEventListener('change', filtrarProdutos);
+}
+
+// Filtrar e ordenar produtos
+function filtrarProdutos() {
+  let produtosFiltrados = [...todosProdutos];
+
+  // Filtro por busca
+  const busca = document.getElementById('busca').value.toLowerCase();
+  if (busca) {
+    produtosFiltrados = produtosFiltrados.filter(p =>
+      p.nome.toLowerCase().includes(busca) ||
+      p.descricao.toLowerCase().includes(busca)
+    );
+  }
+
+  // Filtro por categoria
+  const categoria = document.getElementById('filtroCategoria').value;
+  if (categoria) {
+    produtosFiltrados = produtosFiltrados.filter(p => p.categoria === categoria);
+  }
+
+  // Ordenação por preço
+  const ordenacao = document.getElementById('ordenacao').value;
+  if (ordenacao === 'menor') {
+    produtosFiltrados.sort((a, b) => a.preco - b.preco);
+  } else if (ordenacao === 'maior') {
+    produtosFiltrados.sort((a, b) => b.preco - a.preco);
+  }
+
+  renderizarProdutos(produtosFiltrados);
 }
 
 // Renderizar produtos na página
@@ -30,7 +73,7 @@ function renderizarProdutos(produtos) {
   produtos.forEach((produto, index) => {
     html += `
       <div class="col-lg-4 col-md-6 col-sm-12 scroll-reveal">
-        <div class="card produto-card">
+        <div class="card produto-card" style="cursor: pointer;" onclick="irParaDetalhes(${produto.id})">
           <div class="produto-img-container">
             <img src="${produto.imagem}" alt="${produto.nome}" class="produto-img">
             <span class="produto-categoria">${produto.categoria}</span>
@@ -39,7 +82,7 @@ function renderizarProdutos(produtos) {
             <h5 class="produto-nome">${produto.nome}</h5>
             <p class="produto-descricao">${produto.descricao}</p>
             <div class="produto-preco">R$ ${produto.preco.toFixed(2)}</div>
-            <button class="btn btn-adicionar" onclick="adicionarProdutoAoCarrinho(${produto.id})">
+            <button class="btn btn-adicionar" onclick="event.stopPropagation(); adicionarProdutoAoCarrinho(${produto.id})">
               <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
             </button>
           </div>
@@ -124,6 +167,11 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }
   });
 });
+
+// Ir para página de detalhes do produto
+function irParaDetalhes(produtoId) {
+  window.location.href = `product-detail.html?id=${produtoId}`;
+}
 
 // Iniciar quando o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', inicializar);

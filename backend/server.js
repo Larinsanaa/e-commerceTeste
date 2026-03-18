@@ -4,11 +4,12 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 const app = express();
-const PORT = 5000;
+const PORT = 3000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Banco de dados
 const db = new sqlite3.Database('./database.db', (err) => {
@@ -44,15 +45,28 @@ function initDatabase() {
           { nome: 'Jaqueta Denim', descricao: 'Jaqueta jeans clássica', preco: 279.90, categoria: 'Jaquetas', imagem: 'https://via.placeholder.com/300x400?text=Denim+Jacket' },
           { nome: 'Calça Jeans Azul', descricao: 'Jeans azul escuro premium', preco: 169.90, categoria: 'Calças', imagem: 'https://via.placeholder.com/300x400?text=Jeans+Azul' },
           { nome: 'Camiseta Branca', descricao: 'T-shirt branca básica', preco: 69.90, categoria: 'Camisetas', imagem: 'https://via.placeholder.com/300x400?text=T-Shirt+White' },
+          { nome: 'Look Feminino', descricao: 'Conjunto completo: Blusa + Calça + Sapato', preco: 299.90, categoria: 'Looks', imagem: '/img/muie1.png' },
+          { nome: 'Look Masculino', descricao: 'Conjunto completo: Camiseta + Calça + Tenis', preco: 349.90, categoria: 'Looks', imagem: '/img/homi1.png' },
+          { nome: 'Look Elegante', descricao: 'Conjunto completo: Vestido + Bolsa + Salto', preco: 499.90, categoria: 'Looks', imagem: '/img/muie4.png' },
+          { nome: 'Look Sofisticado', descricao: 'Conjunto completo: Jaqueta + Calça + Bota', preco: 549.90, categoria: 'Looks', imagem: '/img/homi4.png' },
         ];
 
         produtos.forEach(p => {
           db.run(
             "INSERT INTO produtos (nome, descricao, preco, categoria, imagem) VALUES (?, ?, ?, ?, ?)",
-            [p.nome, p.descricao, p.preco, p.categoria, p.imagem]
+            [p.nome, p.descricao, p.preco, p.categoria, p.imagem],
+            function(err) {
+              if (err) {
+                console.error('Erro ao inserir produto:', err);
+              } else {
+                console.log(`Produto inserido: ${p.nome} (ID: ${this.lastID})`);
+              }
+            }
           );
         });
-        console.log('Produtos de exemplo inseridos');
+        console.log('Iniciando inserção de produtos de exemplo');
+      } else {
+        console.log(`Banco já contém ${row.count} produtos`);
       }
     });
   });
@@ -75,9 +89,29 @@ function initDatabase() {
 app.get('/api/produtos', (req, res) => {
   db.all("SELECT * FROM produtos", (err, rows) => {
     if (err) {
+      console.error('Erro ao buscar produtos:', err);
       res.status(500).json({ erro: err.message });
     } else {
+      console.log(`Retornando ${rows.length} produtos`);
       res.json(rows);
+    }
+  });
+});
+
+// GET - Buscar um produto por ID
+app.get('/api/produtos/:id', (req, res) => {
+  const { id } = req.params;
+  console.log(`Buscando produto com ID: ${id}`);
+  db.get("SELECT * FROM produtos WHERE id = ?", [id], (err, row) => {
+    if (err) {
+      console.error('Erro ao buscar produto:', err);
+      res.status(500).json({ erro: err.message });
+    } else if (!row) {
+      console.warn(`Produto não encontrado para ID: ${id}`);
+      res.status(404).json({ erro: 'Produto não encontrado' });
+    } else {
+      console.log(`Produto encontrado: ${row.nome}`);
+      res.json(row);
     }
   });
 });
@@ -143,6 +177,36 @@ app.delete('/api/carrinho/:id', (req, res) => {
       res.json({ mensagem: 'Produto removido do carrinho' });
     }
   });
+});
+
+// PUT - Atualizar quantidade do item no carrinho
+app.put('/api/carrinho/:id', (req, res) => {
+  const { id } = req.params;
+  const { quantidade } = req.body;
+
+  if (!quantidade || quantidade < 1) {
+    // Se quantidade <= 0, remove o item
+    db.run("DELETE FROM carrinho WHERE id = ?", [id], (err) => {
+      if (err) {
+        res.status(500).json({ erro: err.message });
+      } else {
+        res.json({ mensagem: 'Produto removido do carrinho' });
+      }
+    });
+  } else {
+    // Atualizar quantidade
+    db.run(
+      "UPDATE carrinho SET quantidade = ? WHERE id = ?",
+      [quantidade, id],
+      (err) => {
+        if (err) {
+          res.status(500).json({ erro: err.message });
+        } else {
+          res.json({ mensagem: 'Quantidade atualizada' });
+        }
+      }
+    );
+  }
 });
 
 // Iniciar servidor

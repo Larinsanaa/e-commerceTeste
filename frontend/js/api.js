@@ -1,5 +1,5 @@
 // Configuração da API
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'http://localhost:3000/api';
 
 // FUNÇÕES DE PRODUTOS
 async function carregarProdutos() {
@@ -50,5 +50,22 @@ async function removerDoCarrinho(carrinhoId) {
     return resultado;
   } catch (erro) {
     console.error('Erro ao remover do carrinho:', erro);
+  }
+}
+
+async function atualizarQuantidade(carrinhoId, quantidade) {
+  try {
+    const response = await fetch(`${API_URL}/carrinho/${carrinhoId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ quantidade })
+    });
+    const resultado = await response.json();
+    return resultado;
+  } catch (erro) {
+    console.error('Erro ao atualizar quantidade:', erro);
+    throw erro;
   }
 }
