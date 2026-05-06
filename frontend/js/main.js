@@ -75,14 +75,14 @@ function renderizarProdutos(produtos) {
       <div class="col-lg-4 col-md-6 col-sm-12 scroll-reveal">
         <div class="card produto-card" style="cursor: pointer;" onclick="irParaDetalhes(${produto.id})">
           <div class="produto-img-container">
-            <img src="${produto.imagem}" alt="${produto.nome}" class="produto-img">
+            <img src="${produto.imagem}" alt="${produto.nome}" class="produto-img" onerror="this.src='/img/logo.png'">
             <span class="produto-categoria">${produto.categoria}</span>
           </div>
           <div class="produto-info">
             <h5 class="produto-nome">${produto.nome}</h5>
             <p class="produto-descricao">${produto.descricao}</p>
             <div class="produto-preco">R$ ${produto.preco.toFixed(2)}</div>
-            <button class="btn btn-adicionar" onclick="event.stopPropagation(); adicionarProdutoAoCarrinho(${produto.id})">
+            <button class="btn btn-adicionar" onclick="event.stopPropagation(); adicionarProdutoAoCarrinho(${produto.id}, this)">
               <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
             </button>
           </div>
@@ -169,7 +169,17 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Ir para página de detalhes do produto
-function irParaDetalhes(produtoId) {
+function irParaDetalhes(produtoId, imagemFallback) {
+  const produto = todosProdutos.find(p => p.id === produtoId);
+  if (produto) {
+    sessionStorage.setItem('produtoAtual', JSON.stringify(produto));
+  } else if (imagemFallback) {
+    const atual = sessionStorage.getItem('produtoAtual');
+    const cache = atual ? JSON.parse(atual) : {};
+    if (String(cache.id) !== String(produtoId)) {
+      sessionStorage.setItem('produtoAtual', JSON.stringify({ id: produtoId, imagem: imagemFallback }));
+    }
+  }
   window.location.href = `product-detail.html?id=${produtoId}`;
 }
 

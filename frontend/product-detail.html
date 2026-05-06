@@ -41,7 +41,7 @@
       <div class="row g-5">
         <!-- Imagem -->
         <div class="col-lg-6">
-          <img id="produtoImagem" src="" alt="Produto" class="img-fluid rounded" style="max-height: 500px; object-fit: cover;">
+          <img id="produtoImagem" src="" alt="Produto" class="img-fluid rounded" style="max-height: 500px; object-fit: cover;" onerror="this.src='/img/logo.png'">
         </div>
 
         <!-- Informações -->
@@ -61,7 +61,7 @@
             <input type="number" id="quantidade" class="form-control" style="max-width: 100px;" value="1" min="1">
           </div>
 
-          <button class="btn btn-dark btn-lg w-100" onclick="adicionarAoCarrinhoDetalhes()">
+          <button class="btn btn-dark btn-lg w-100" onclick="adicionarAoCarrinhoDetalhes(this)">
             <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
           </button>
         </div>

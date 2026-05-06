@@ -15,30 +15,21 @@ async function carregarProdutos() {
 
 // FUNÇÕES DE CARRINHO
 async function carregarCarrinho() {
-  try {
-    const response = await fetch(`${API_URL}/carrinho`);
-    const itens = await response.json();
-    return itens;
-  } catch (erro) {
-    console.error('Erro ao carregar carrinho:', erro);
-    return [];
-  }
+  const response = await fetch(`${API_URL}/carrinho`);
+  const itens = await response.json();
+  return itens;
 }
 
 async function adicionarAoCarrinho(produtoId, quantidade = 1) {
-  try {
-    const response = await fetch(`${API_URL}/carrinho`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ produtoId, quantidade })
-    });
-    const resultado = await response.json();
-    return resultado;
-  } catch (erro) {
-    console.error('Erro ao adicionar ao carrinho:', erro);
-  }
+  const response = await fetch(`${API_URL}/carrinho`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ produtoId, quantidade })
+  });
+  const resultado = await response.json();
+  return resultado;
 }
 
 async function removerDoCarrinho(carrinhoId) {

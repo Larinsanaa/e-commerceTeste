@@ -16,6 +16,12 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<script>
+  // Proteção: redireciona para login se não estiver autenticado
+  if (sessionStorage.getItem('adminLogado') !== 'true') {
+    window.location.href = 'login.html';
+  }
+</script>
 
   <!-- NAVBAR -->
   <nav class="navbar navbar-dark bg-dark sticky-top">
@@ -29,6 +35,9 @@
         </span>
         <button class="btn btn-outline-light btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" style="font-size: 20px;">
           <i class="bi bi-cart3"></i> Ver Carrinho
+        </button>
+        <button class="btn btn-outline-danger btn-sm ms-2" type="button" onclick="sair()" style="font-size: 16px;" title="Sair">
+          <i class="bi bi-box-arrow-right"></i> Sair
         </button>
       </div>
     </div>
@@ -103,7 +112,7 @@
       <div class="row g-4">
         <!-- Carrossel 1 - Look Feminino -->
         <div class="col-lg-3 col-md-6">
-          <div class="look-card" style="cursor: pointer;" onclick="irParaDetalhes(4)">
+          <div class="look-card" style="cursor: pointer;" onclick="irParaDetalhes(4, '/img/muie1.png')">
             <div id="carousel1" class="carousel slide" data-bs-ride="carousel">
               <div class="carousel-inner rounded">
                 <div class="carousel-item active">
@@ -130,7 +139,7 @@
             <p class="text-center text-muted small">Blusa + Calça + Sapato</p>
             <div class="d-flex justify-content-center align-items-center gap-5 mt-3 pb-4">
               <span class="h5 mb-0">R$ 299,90</span>
-              <button class="btn btn-dark btn-sm" onclick="event.stopPropagation(); adicionarProdutoAoCarrinho(4)">
+              <button class="btn btn-dark btn-sm" onclick="event.stopPropagation(); adicionarProdutoAoCarrinho(4, this)">
                 <i class="bi bi-cart-plus"></i>
               </button>
             </div>
@@ -139,7 +148,7 @@
 
         <!-- Carrossel 2 - Look Masculino -->
         <div class="col-lg-3 col-md-6">
-          <div class="look-card" style="cursor: pointer;" onclick="irParaDetalhes(5)">
+          <div class="look-card" style="cursor: pointer;" onclick="irParaDetalhes(5, '/img/homi1.png')">
             <div id="carousel2" class="carousel slide" data-bs-ride="carousel">
               <div class="carousel-inner rounded">
                 <div class="carousel-item active">
@@ -166,7 +175,7 @@
             <p class="text-center text-muted small">Camiseta + Calça + Tenis</p>
             <div class="d-flex justify-content-center align-items-center gap-5 mt-3 pb-4">
               <span class="h5 mb-0">R$ 349,90</span>
-              <button class="btn btn-dark btn-sm" onclick="event.stopPropagation(); adicionarProdutoAoCarrinho(5)">
+              <button class="btn btn-dark btn-sm" onclick="event.stopPropagation(); adicionarProdutoAoCarrinho(5, this)">
                 <i class="bi bi-cart-plus"></i>
               </button>
             </div>
@@ -175,7 +184,7 @@
 
         <!-- Carrossel 3 - Variação Feminina -->
         <div class="col-lg-3 col-md-6">
-          <div class="look-card" style="cursor: pointer;" onclick="irParaDetalhes(6)">
+          <div class="look-card" style="cursor: pointer;" onclick="irParaDetalhes(6, '/img/muie4.png')">
             <div id="carousel3" class="carousel slide" data-bs-ride="carousel">
               <div class="carousel-inner rounded">
                 <div class="carousel-item active">
@@ -202,7 +211,7 @@
             <p class="text-center text-muted small">Vestido + Bolsa + Salto</p>
             <div class="d-flex justify-content-center align-items-center gap-5 mt-3 pb-4">
               <span class="h5 mb-0">R$ 499,90</span>
-              <button class="btn btn-dark btn-sm" onclick="event.stopPropagation(); adicionarProdutoAoCarrinho(6)">
+              <button class="btn btn-dark btn-sm" onclick="event.stopPropagation(); adicionarProdutoAoCarrinho(6, this)">
                 <i class="bi bi-cart-plus"></i>
               </button>
             </div>
@@ -211,7 +220,7 @@
 
         <!-- Carrossel 4 - Variação Masculina -->
         <div class="col-lg-3 col-md-6">
-          <div class="look-card" style="cursor: pointer;" onclick="irParaDetalhes(7)">
+          <div class="look-card" style="cursor: pointer;" onclick="irParaDetalhes(7, '/img/homi4.png')">
             <div id="carousel4" class="carousel slide" data-bs-ride="carousel">
               <div class="carousel-inner rounded">
                 <div class="carousel-item active">
@@ -238,7 +247,7 @@
             <p class="text-center text-muted small">Jaqueta + Calça + Bota</p>
             <div class="d-flex justify-content-center align-items-center gap-5 mt-3 pb-4">
               <span class="h5 mb-0">R$ 549,90</span>
-              <button class="btn btn-dark btn-sm" onclick="event.stopPropagation(); adicionarProdutoAoCarrinho(7)">
+              <button class="btn btn-dark btn-sm" onclick="event.stopPropagation(); adicionarProdutoAoCarrinho(7, this)">
                 <i class="bi bi-cart-plus"></i>
               </button>
             </div>
@@ -277,5 +286,11 @@
   <script src="js/api.js"></script>
   <script src="js/carrinho.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    function sair() {
+      sessionStorage.removeItem('adminLogado');
+      window.location.href = 'login.html';
+    }
+  </script>
 </body>
 </html>

@@ -45,7 +45,7 @@ function renderizarCarrinho() {
 
     html += `
       <div class="carrinho-item">
-        <img src="${item.imagem}" alt="${item.nome}">
+        <img src="${item.imagem}" alt="${item.nome}" onerror="this.src='/img/logo.png'">
         <div class="carrinho-item-info">
           <div class="carrinho-item-nome">${item.nome}</div>
           <div class="carrinho-item-preco">
@@ -83,7 +83,9 @@ async function removerItem(carrinhoId) {
   try {
     await removerDoCarrinho(carrinhoId);
   } catch (erro) {
-    console.warn('Falha ao remover do backend:', erro);
+    console.warn('Backend indisponível, removendo do localStorage:', erro);
+    const carrinho = carregarCarrinhoLocal().filter(i => i.id !== carrinhoId);
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
   }
   await atualizarCarrinho();
 }
@@ -103,12 +105,13 @@ async function alterarQuantidade(carrinhoId, delta) {
   try {
     await atualizarQuantidade(carrinhoId, novaQuantidade);
   } catch (erro) {
-    console.warn('Falha ao atualizar quantidade no backend:', erro);
-    // Atualizar localmente como fallback
-    item.quantidade = novaQuantidade;
-    salvarCarrinhoLocal();
-    renderizarCarrinho();
-    atualizarContadorCarrinho();
+    console.warn('Backend indisponível, atualizando localStorage:', erro);
+    const carrinho = carregarCarrinhoLocal();
+    const local = carrinho.find(i => i.id === carrinhoId);
+    if (local) {
+      local.quantidade = novaQuantidade;
+      localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    }
   }
   await atualizarCarrinho();
 }
@@ -135,17 +138,49 @@ function atualizarContadorCarrinho() {
   contador.textContent = total;
 }
 
+// Adicionar ao localStorage como fallback
+function adicionarLocalStorage(produtoId, quantidade) {
+  const produto = todosProdutos.find(p => p.id === produtoId);
+  if (!produto) return;
+
+  const carrinho = carregarCarrinhoLocal();
+  const existente = carrinho.find(i => i.produtoId === produtoId);
+
+  if (existente) {
+    existente.quantidade += quantidade;
+  } else {
+    carrinho.push({
+      id: produtoId,
+      produtoId: produtoId,
+      nome: produto.nome,
+      preco: produto.preco,
+      imagem: produto.imagem,
+      quantidade: quantidade
+    });
+  }
+  localStorage.setItem('carrinho', JSON.stringify(carrinho));
+}
+
 // Adicionar produto ao carrinho
-async function adicionarProdutoAoCarrinho(produtoId) {
-  await adicionarAoCarrinho(produtoId, 1);
+async function adicionarProdutoAoCarrinho(produtoId, btnClicado) {
+  try {
+    await adicionarAoCarrinho(produtoId, 1);
+  } catch (erro) {
+    console.warn('Backend indisponível, salvando no localStorage:', erro);
+    adicionarLocalStorage(produtoId, 1);
+  }
   await atualizarCarrinho();
 
-  // Feedback visual
-  const btn = event.target;
-  btn.textContent = 'Adicionado!';
-  btn.disabled = true;
-  setTimeout(() => {
-    btn.textContent = 'Adicionar ao Carrinho';
-    btn.disabled = false;
-  }, 1500);
+  // Feedback visual no botão
+  const btn = btnClicado || event?.currentTarget || event?.target;
+  if (btn) {
+    const btnReal = btn.closest('button') || btn;
+    const textoOriginal = btnReal.innerHTML;
+    btnReal.innerHTML = '<i class="bi bi-check-lg"></i> Adicionado!';
+    btnReal.disabled = true;
+    setTimeout(() => {
+      btnReal.innerHTML = textoOriginal;
+      btnReal.disabled = false;
+    }, 1500);
+  }
 }
